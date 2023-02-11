@@ -12,34 +12,27 @@ from Structures.Map import Map
 
 from algorythms import * 
 
-
 import Structures
 
 ## PYGAME WINDOW CREATION
 pygame.init()
 size = width, height = 800, 800
-#warehouse_pos = Vector2(width/2, height/2)
 
 #Map Creation
 parcel_info = create_parcel_info()
-city_map = Map(parcel_info, size, random_points(len(parcel_info) + 10, width, height))
+city_map = Map(parcel_info, random_points(len(parcel_info) + 10, width, height))
 
 # creating surfaces to draw on, background and dots layer
 # (layer for truck is stored in truck class)
 screen = pygame.display.set_mode(size)
 dots = pygame.Surface.copy(screen)
 
-# global coords variable, this is a primitive list of packages
-#coords = [Vector2(0,0)]
-
-# coords = cluster_points(5, 5, 10)
 coords_list = []
 for entry in city_map.parcels:
     parcel = entry[0]
     coords_list.append(parcel.position)
 
 route = sort_by_distance(coords_list, city_map.warehouse)
-
 
 tkun = Truck()
 tkun.drive_route(route, city_map.warehouse)

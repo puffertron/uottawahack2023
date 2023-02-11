@@ -9,10 +9,9 @@ import random
 
 
 class Map:
-    def __init__(self, parcel_info: list[tuple[str,]], size: tuple[int,int], points: list[Vector2]):
+    def __init__(self, parcel_info: list[tuple[str,]], points: list[Vector2]):
         self.available_points = points
         self.warehouse = self.name_to_location()
-        self.size = self.width, self.height = size
 
         self.create_parcels(parcel_info)
     
