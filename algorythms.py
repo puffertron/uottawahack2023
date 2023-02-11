@@ -19,8 +19,8 @@ def spiral_deliver(points: list[Vector2], origin: Vector2) -> list[Vector2]:
         if t < 180:
             pass
 
-"""sort em by distance, birds eye view"""
 def sort_by_distance(points: list[Vector2], origin: Vector2) -> list[Vector2]:
+    """sort em by distance, birds eye view"""
     distances = []
     for p in points:
         d = origin.distance_to(p)
