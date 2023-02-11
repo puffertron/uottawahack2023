@@ -14,7 +14,6 @@ class Map:
         self.warehouse = self.name_to_location()
         self.size = self.width, self.height = size
 
-        #print(parcel_info)
         self.create_parcels(parcel_info)
     
     def name_to_location(self): #real map will use map data to determine this instead of randomizing
@@ -22,7 +21,7 @@ class Map:
         return self.available_points.pop(i)
     
     def create_parcels(self, parcel_info: list[tuple[str,]]):
-        self.parcels = [] #todo sort by distance
+        self.parcels = [] 
         for entry in parcel_info:
             parcel = Parcel(entry[0], self.name_to_location())
             distance = self.find_distance(parcel.position,self.warehouse)

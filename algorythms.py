@@ -62,14 +62,14 @@ def sort_by_distance(points: list[Vector2], origin: Vector2) -> list[Vector2]:
         d = origin.distance_to(p)
         distances.append(d)
     
-    print(points)
-    print (distances)
+    #print(points)
+    #print (distances)
 
     zipped = list(zip(distances, points))
     zipped.sort()
     
     distances, sortedpoints, = zip(*zipped)
-    print(sortedpoints)
-    print (distances)
+    #print(sortedpoints)
+    #print (distances)
 
     return sortedpoints
