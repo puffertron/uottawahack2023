@@ -58,7 +58,7 @@ coords = random_points(10)
 route = sort_by_distance(coords, middle)
 
 
-tkun = Tr
+tkun = Truck()
 tkun.drive_route(route, (width/2, height/2))
 
 while True:
