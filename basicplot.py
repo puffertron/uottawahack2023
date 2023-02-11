@@ -9,18 +9,21 @@ from pygame import Vector2
 from truck import Truck
 from algorythms import *
 
+## PYGAME WINDOW CREATION
 pygame.init()
 size = width, height = 320, 240
 middle = Vector2(width/2, height/2)
 
+# creating surfaces to draw on, background and dots layer
+# (layer for truck is stored in truck class)
 screen = pygame.display.set_mode(size)
-
 dots = pygame.Surface.copy(screen)
 
-
+# global coords variable, this is a primitive list of packages
 coords = [Vector2(0,0)]
 
-def random_points(amt):
+"""generate x number of points randomly distributed, returns a list of Vec2"""
+def random_points(amt) -> list[Vector2]:
     points = []
     for i in range(1, amt):
         vec = Vector2(random.randint(0, width), random.randint(0, height))
@@ -28,7 +31,8 @@ def random_points(amt):
     
     return points
 
-def cluster_points(density, c_amt, c_rad):
+"""generate y number of clusters, containing x number of points within z radius, returns a list of Vec2"""
+def cluster_points(density, c_amt, c_rad) -> list[Vector2]:
     clusters = []
     points = []
     for i in range(1, c_amt):
