@@ -6,11 +6,13 @@ import time
 
 from pygame import Vector2
 
-from truck import Truck
+from Structures.Truck import Truck
+from Structures.StreetMap import StreetMap
+
 from algorythms import *
 
-from Structures import *
 
+import Structures
 
 
 ## PYGAME WINDOW CREATION
@@ -56,7 +58,7 @@ coords = random_points(10)
 route = sort_by_distance(coords, middle)
 
 
-tkun = Truck()
+tkun = Tr
 tkun.drive_route(route, (width/2, height/2))
 
 while True:
