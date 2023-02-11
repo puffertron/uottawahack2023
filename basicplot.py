@@ -17,12 +17,12 @@ import Structures
 
 ## PYGAME WINDOW CREATION
 pygame.init()
-size = width, height = 320, 240
+size = width, height = 800, 800
 #warehouse_pos = Vector2(width/2, height/2)
 
 #Map Creation
-parcels = create_parcels()
-city_map = Map(parcels, "warehouse", random_points(len(parcels) + 1, width, height))
+parcel_info = create_parcel_info()
+city_map = Map(parcel_info, size, random_points(len(parcel_info) + 10, width, height))
 
 # creating surfaces to draw on, background and dots layer
 # (layer for truck is stored in truck class)
@@ -30,25 +30,28 @@ screen = pygame.display.set_mode(size)
 dots = pygame.Surface.copy(screen)
 
 # global coords variable, this is a primitive list of packages
-coords = [Vector2(0,0)]
+#coords = [Vector2(0,0)]
 
 # coords = cluster_points(5, 5, 10)
-coords = random_points(10)
+coords_list = []
+for entry in city_map.parcels:
+    parcel = entry[0]
+    coords_list.append(parcel.position)
 
-route = sort_by_distance(coords, city_map.warehouse.position)
+route = sort_by_distance(coords_list, city_map.warehouse)
 
 
 tkun = Truck()
-tkun.drive_route(route, (width/2, height/2))
+tkun.drive_route(route, city_map.warehouse)
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
 
-    for p in coords:
+    for p in coords_list:
         pygame.draw.circle(dots, "white", p, 3.0)
 
-    pygame.draw.circle(dots, "green", (width/2, height/2), 4.0)
+    pygame.draw.circle(dots, "green", city_map.warehouse, 4.0)
 
     screen.fill("black")
     screen.blit(tkun.surf, tkun.surf.get_rect())

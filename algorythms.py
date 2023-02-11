@@ -6,7 +6,7 @@ import time
 
 from pygame import Vector2
 
-def create_parcels() -> list[tuple[str,]]:
+def create_parcel_info() -> list[tuple[str,]]:
     amount = random.randint(50,100)
     parcels = []
     for i in range(amount):
@@ -73,5 +73,3 @@ def sort_by_distance(points: list[Vector2], origin: Vector2) -> list[Vector2]:
     print (distances)
 
     return sortedpoints
-
-print(create_parcels())
