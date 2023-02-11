@@ -8,17 +8,21 @@ from pygame import Vector2
 
 from Structures.Truck import Truck
 from Structures.StreetMap import StreetMap
+from Structures.Map import Map
 
-from algorythms import *
+from algorythms import * 
 
 
 import Structures
 
-
 ## PYGAME WINDOW CREATION
 pygame.init()
 size = width, height = 320, 240
-middle = Vector2(width/2, height/2)
+#warehouse_pos = Vector2(width/2, height/2)
+
+#Map Creation
+parcels = create_parcels()
+city_map = Map(parcels, "warehouse", random_points(len(parcels) + 1, width, height))
 
 # creating surfaces to draw on, background and dots layer
 # (layer for truck is stored in truck class)
@@ -28,34 +32,10 @@ dots = pygame.Surface.copy(screen)
 # global coords variable, this is a primitive list of packages
 coords = [Vector2(0,0)]
 
-def random_points(amt) -> list[Vector2]:
-    """generate x number of points randomly distributed, returns a list of Vec2"""
-    points = []
-    for i in range(1, amt):
-        vec = Vector2(random.randint(0, width), random.randint(0, height))
-        points.append(vec)
-    
-    return points
-
-def cluster_points(density, c_amt, c_rad) -> list[Vector2]:
-    """generate y number of clusters, containing x number of points within z radius, returns a list of Vec2"""
-    clusters = []
-    points = []
-    for i in range(1, c_amt):
-        vec = Vector2(random.randint(0, width), random.randint(0, height))
-        clusters.append(vec)
-    
-    for c in clusters:
-        for i in range(density):
-            vec = Vector2(random.randint(c.x-c_rad, c.x-c_rad), random.randint(c.y-c_rad, c.y-c_rad))
-            points.append(vec)
-    
-    return points
-
 # coords = cluster_points(5, 5, 10)
 coords = random_points(10)
 
-route = sort_by_distance(coords, middle)
+route = sort_by_distance(coords, city_map.warehouse.position)
 
 
 tkun = Truck()
