@@ -9,8 +9,8 @@ class Road:
     def __init__(self:Vector2,start:Vector2, end, segments: list[tuple[Vector2,Vector2]]) -> None:
         self.length = 0
         self.segments = segments
-        self.start_connections = []
-        self.end_connections = []
+        self.start_connections:list[Road] = []
+        self.end_connections:list[Road] = []
         self.nodes = []
         self.start = start
         self.end = end
@@ -199,7 +199,11 @@ class StreetMap:
 
 
         #Populate links (only for source)
-        pass
+        if is_start == True:
+            source_road.start_connections = populating_roads
+        else:
+            source_road.end_connections = populating_roads
+        
     
                 
         
