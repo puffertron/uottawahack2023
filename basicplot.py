@@ -20,7 +20,8 @@ size = width, height = 800, 800
 
 #Map Creation
 parcel_info = create_parcel_info()
-city_map = Map(parcel_info, random_points(len(parcel_info) + 10, width, height))
+#TODO - This next line should take random map data
+city_map = Map.open_street_map_processor(parcel_info, random_points(len(parcel_info) + 10, width, height))
 
 # creating surfaces to draw on, background and dots layer
 # (layer for truck is stored in truck class)
