@@ -9,4 +9,4 @@ OPEN_STREET_MAPS_DATA = None
 
 #main
 parcels = initialize_objects(OPEN_STREET_MAPS_DATA, PRESET_DELIVERIES)
-assign_clusters(parcels,config.size) #todo fix config name 
+clusters = assign_clusters(parcels,config.map_radius)
