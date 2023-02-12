@@ -35,6 +35,6 @@ class Truck:
             if smallest_distance == None or distance < smallest_distance:
                 smallest_distance = distance
                 smallest_distance_location = location
-        
+
         route.remove(smallest_distance_location)
         return smallest_distance_location

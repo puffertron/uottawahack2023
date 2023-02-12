@@ -106,10 +106,12 @@ def assign_destinations_route(quadtree_copy, clusters, nearby_parcels, parcel):
         boxes = []
         
         if len(saved_parcels) + len(nearby_parcels) >= max_parcel_delivery_size:
+            print("\nSaved parcels: " + str(len(saved_parcels)), "Nearby parcels: " + str(len(nearby_parcels)))
             break
 
         depth += 1
         if depth > granularity * 2:
+            print("ERROR: Depth exceeded")
             break
 
         temp_box_x = box_x - depth
@@ -133,7 +135,7 @@ def assign_destinations_route(quadtree_copy, clusters, nearby_parcels, parcel):
         box_y + box_height - parcel.position.y
     ]
     
-    while True:
+    while nearby_parcels != [] and len(saved_parcels) != max_parcel_delivery_size:
         nearby_parcels.sort(key=lambda nearby_parcel: nearby_parcel[2])
         nearby_parcels = nearby_parcels[:(max_parcel_delivery_size - len(saved_parcels))]
 
@@ -174,6 +176,11 @@ def assign_destinations_route(quadtree_copy, clusters, nearby_parcels, parcel):
 
     routes.append([nearby_parcel[0] for nearby_parcel in (nearby_parcels + saved_parcels)])
 
+    # print(routes)
+    
+    if routes[-1] == []:
+        routes.pop()
+    
     return routes
 
 def generate_deliveries():
