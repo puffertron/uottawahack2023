@@ -21,7 +21,7 @@ class Map:
         pass
     
     @staticmethod
-    def open_street_map_processor(parcel_info: list[tuple[str,]], points: list[Vector2]):
+    def set_up_state(parcel_info: list[tuple[str,]], points: list[Vector2]):
         #This takes in raw data from open street maps and the parcels to be delivered and sorts it into the state of Map. TODO - make it actually take Open Street Map data and parse it (instead of taking in pre-generated points)
         Map.available_points = points
         Map.warehouse = Map.name_to_location()
