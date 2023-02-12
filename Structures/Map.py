@@ -50,10 +50,13 @@ class Map:
 
         running = True
         distance_since_last_iter:int = 0
+        splitting_point:Vector2 = Vector2(0,0)
         while running:
             #find next closest junction
+            #splitting_point = 
 
-            distance_since_last_iter = 
+            #distance_since_last_iter = splitting_point
+
 
 
 

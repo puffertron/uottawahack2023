@@ -22,6 +22,7 @@ class Road:
             length+= dist
 
         return length
+    
 
 class StreetMap:
     def __init__(self) -> None:
@@ -83,13 +84,14 @@ class StreetMap:
     def draw_city_lines(self, roads: Road):
         self.surf = pygame.Surface(pygame.display.get_window_size())
         width, height = self.surf.get_size()
+        x = 0
         for road in roads:
-            road.segments 
-            lastpoint = Vector2(way[0].x*width, way[0].y*height)
-            for p in way:
-                pxpoint = Vector2(width*p.x, height*p.y)
-                pygame.draw.line(self.surf,"yellow", lastpoint, pxpoint,3)
-                lastpoint = pxpoint
+            x += 1
+            colors = ["red", "green", "blue", "yellow", "orange", "purple", "pink", "cyan", "magenta", "brown", "grey", "white"]
+            for line in road.segments:    
+                pxpoint1 = Vector2(width*line[0].x, height*line[0].y)
+                pxpoint2 = Vector2(width*line[1].x, height*line[1].y)
+                pygame.draw.line(self.surf,colors[x % len(colors)], pxpoint1, pxpoint2,3)
 
         return self.surf
     
@@ -122,46 +124,83 @@ class StreetMap:
 
         roads = []
         for i, seg in enumerate(z):
-            print ("-------")
             seggroup = []
             #x coord
-            x1 = xvalues.pop(i)[0]
+            #x1 = xvalues.pop(i)[0]
+            x1 = xvalues[i][0]
+            x2 = xvalues[i][1]
             #query
             qu = np.array(xvalues, dtype=object)
-            indicies = np.where(qu == x1)[0]
+            indicies1 = np.where(qu == x1)[0]
+            indicies2 = np.where(qu == x2)[0]
+
+            indicies = indicies1.tolist() + indicies2.tolist()
 
             for i in indicies:
                 select = segments[i]
                 seggroup.append(select)
                 
-            print(seggroup)
             start = seg[0]
             end = seggroup[-1]
             r = Road(start, end, seggroup)
 
             roads.append(r)
 
-    def populate_linked_list_network():
+        return roads
+
+            
+    def populate_linked_list_network(roads: list[Road]):
         for road in roads: #TODO - make it so it populates both sides at once to make way more efficient
             #Do this process twice, once for start points, once for end points
             StreetMap.populate_road_ll(road, roads, True)
-            StreetMap.populate_road_ll(road, roads, True)
+            StreetMap.populate_road_ll(road, roads, False)
             
             
     #function only used in populate_linked_list_network
     def populate_road_ll(source_road:Road, roads:list[Road], is_start:bool): #TODO - make it not be taking the bool, theres a better way but rushed
         #If is_start is true, does at start points, if false, then end point
+        source_coord = Vector2(0,0)
+        populating_roads = []
+
         if is_start == True:
-            source = source_road.start
+            source_coord = source_road.start
         else:
-            source = source_road.end
-        
+            source_coord = source_road.end
+
+        #TODO - makle one func that does this since code in multiple places
+        #z = zip(roads, xvalues)
+
+        for i, road in enumerate(roads):
+            #x coord
+            #x1 = xvalues.pop(i)[0]
+            x1 = road.start.x
+            x2 = road.end.x
+            #query
+            
+            #THIS IS OLD CODE TO DELETE
+                # qu = np.array(xvalues, dtype=object)
+                # indicies1 = np.where(qu == x1)[0]
+                # indicies2 = np.where(qu == x2)[0]
+
+                # indicies = indicies1.tolist() + indicies2.tolist()
+
+                # for i in indicies:
+                #     select = segments[i]
+                #     seggroup.append(select)
+                    
+                # start = seg[0]
+                # end = seggroup[-1]
+                # r = Road(start, end, seggroup)
+
+                # roads.append(r)
         #Find roads with same x pos (either start or end)
         #Check that they have same y pos
 
+
+
         #Populate links (only for source)
         pass
-
+    
                 
         
         
