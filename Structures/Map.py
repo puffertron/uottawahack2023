@@ -9,9 +9,11 @@ import random
 
 #This is a class that no instances should be made. This is a class to hold make the info of the map and hold the map data.
 class Map:
+
     # The state of the class, just initialized in 'Algorithm'
     available_points:list[Vector2] = []
     warehouse:Vector2 = Vector2(0,0)
+    parcels:list[Parcel] = [] # order closest to warehouse to farthest
     
     
     
@@ -21,8 +23,8 @@ class Map:
     @staticmethod
     def open_street_map_processor(parcel_info: list[tuple[str,]], points: list[Vector2]):
         #This takes in raw data from open street maps and the parcels to be delivered and sorts it into the state of Map. TODO - make it actually take Open Street Map data and parse it (instead of taking in pre-generated points)
-        available_points = points
-        warehouse = Map.name_to_location()
+        Map.available_points = points
+        Map.warehouse = Map.name_to_location()
         
         Map.create_parcels(parcel_info)
     
@@ -33,15 +35,13 @@ class Map:
     
     @staticmethod
     def create_parcels(parcel_info: list[tuple[str,]]):
-        parcels = [] 
+        parcel_dist_pairs = []
         for entry in parcel_info:
             parcel = Parcel(entry[0], Map.name_to_location())
             distance = Map.find_distance(parcel.position,Map.warehouse)
-            Map.parcels.append((parcel,distance))
-        Map.parcels = sorted(parcels, key=itemgetter(1))
+            parcel_dist_pairs.append((parcel,distance))
+        Map.parcels = [parcel_dist_pair[0] for parcel_dist_pair in sorted(parcel_dist_pairs, key=itemgetter(1))]
 
     @staticmethod
     def find_distance(target: Vector2, source: Vector2):
         return (target - source).magnitude()
-    
-
