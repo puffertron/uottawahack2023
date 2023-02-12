@@ -1,9 +1,3 @@
 # uottawahack2023
 
-
-
-
-
-
-Places to Improve:
-- Make view and packages in deliveery visible on a website
+Pigeon optimises parcel delivery by using advanced algorithms that cluster similar locations and minimize travel distance. Let us revolutionize the way parcels are delivered, one delivery at a time.
