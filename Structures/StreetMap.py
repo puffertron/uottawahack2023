@@ -6,7 +6,7 @@ import math
 import sys
 
 class Road:
-    def __init__(self,start, end, segments: list[tuple[Vector2,Vector2]]) -> None:
+    def __init__(self,start, end, segments: list[tuple[Vector2,Vector2]]):
         self.length = 0
         self.segments = segments
         self.connections = []
@@ -82,13 +82,14 @@ class StreetMap:
     def draw_city_lines(self, roads: Road):
         self.surf = pygame.Surface(pygame.display.get_window_size())
         width, height = self.surf.get_size()
+        x = 0
         for road in roads:
-            road.segments 
-            lastpoint = Vector2(way[0].x*width, way[0].y*height)
-            for p in way:
-                pxpoint = Vector2(width*p.x, height*p.y)
-                pygame.draw.line(self.surf,"yellow", lastpoint, pxpoint,3)
-                lastpoint = pxpoint
+            x += 1
+            colors = ["red", "green", "blue", "yellow", "orange", "purple", "pink", "cyan", "magenta", "brown", "grey", "white"]
+            for line in road.segments:    
+                pxpoint1 = Vector2(width*line[0].x, height*line[0].y)
+                pxpoint2 = Vector2(width*line[1].x, height*line[1].y)
+                pygame.draw.line(self.surf,colors[x % len(colors)], pxpoint1, pxpoint2,3)
 
         return self.surf
     
@@ -124,7 +125,8 @@ class StreetMap:
             print ("-------")
             seggroup = []
             #x coord
-            x1 = xvalues.pop(i)[0]
+            #x1 = xvalues.pop(i)[0]
+            x1 = xvalues[i][0]
             #query
             qu = np.array(xvalues, dtype=object)
             indicies = np.where(qu == x1)[0]
@@ -139,6 +141,8 @@ class StreetMap:
             r = Road(start, end, seggroup)
 
             roads.append(r)
+
+        return roads
 
             
 
