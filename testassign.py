@@ -30,7 +30,7 @@ while True:
     for index, route in enumerate(routes):
         for p in [route.position for route in route]:
             pygame.draw.circle(dots, colors[index % len(colors)], p, 3.0)
-        tkun_list[index].drive_route(route, Map.warehouse)
+        tkun_list[index].drive_route(route, Map.warehouse, colors[index % len(colors)])
 
     screen.fill("black")
     for tkun in tkun_list:

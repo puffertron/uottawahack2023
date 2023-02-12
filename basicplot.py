@@ -26,11 +26,47 @@ Map.open_street_map_processor(parcel_info, random_points(len(parcel_info) + 10, 
 # creating surfaces to draw on, background and dots layer
 # (layer for truck is stored in truck class)
 screen = pygame.display.set_mode(size)
+streetmap = pygame.surface.copy(screen)
 dots = pygame.Surface.copy(screen)
 
+<<<<<<< HEAD
 coords_list = []
 for parcel in Map.parcels:
     coords_list.append(parcel.position)
+=======
+
+# global coords variable, this is a primitive list of packages
+coords = [Vector2(0,0)]
+
+def random_points(amt) -> list[Vector2]:
+    """generate x number of points randomly distributed, returns a list of Vec2"""
+    points = []
+    for i in range(1, amt):
+        vec = Vector2(random.randint(0, width), random.randint(0, height))
+        points.append(vec)
+    
+    return points
+
+def cluster_points(density, c_amt, c_rad) -> list[Vector2]:
+    """generate y number of clusters, containing x number of points within z radius, returns a list of Vec2"""
+    clusters = []
+    points = []
+    for i in range(1, c_amt):
+        vec = Vector2(random.randint(0, width), random.randint(0, height))
+        clusters.append(vec)
+    
+    for c in clusters:
+        for i in range(density):
+            vec = Vector2(random.randint(c.x-c_rad, c.x-c_rad), random.randint(c.y-c_rad, c.y-c_rad))
+            points.append(vec)
+    
+    return points
+
+# coords = cluster_points(5, 5, 10)
+coords = random_points(10)
+
+route = sort_by_distance(coords, middle)
+>>>>>>> dc4af6f46460f6d7b29c115eff37f581775dfa52
 
 route = sort_by_distance(coords_list, Map.warehouse)
 
