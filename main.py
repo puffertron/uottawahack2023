@@ -1,22 +1,23 @@
 #imports
 # import basicplot
 from algorithms import *
+import config
 
 from algorythms import * # TEMPORARY
 
 #constants
-RANDOM_DELIVERIES = True
-PRESET_DELIVERIES = ["Put house names here"]
+PRESET_DELIVERIES = False
+OPEN_STREET_MAPS_DATA = None
 
 #main
-# parcels = create_parcels()
 
 # TEMPORARY
-size = width, height = 800, 800
-parcel_info = create_parcel_info()  
-Map.open_street_map_processor(parcel_info, random_points(len(parcel_info) + 10, width, height))
+# size = width, height = 800, 800
+# parcel_info = create_parcel_info()  
+# Map.open_street_map_processor(parcel_info, random_points(len(parcel_info) + 10, width, height))
+# quadtree = construct_quadtree()
+# assign_destinations(quadtree)
 # TEMPORARY
 
-quadtree = construct_quadtree()
-
-assign_destinations(quadtree, {})
+parcels = initialize_objects(OPEN_STREET_MAPS_DATA, PRESET_DELIVERIES)
+clusters = assign_clusters(parcels,config.map_radius)
