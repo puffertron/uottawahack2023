@@ -6,11 +6,13 @@ import math
 import sys
 
 class Road:
-    def __init__(self,segments: list[tuple[Vector2,Vector2]]) -> None:
+    def __init__(self,start, end, segments: list[tuple[Vector2,Vector2]]) -> None:
         self.length = 0
         self.segments = segments
         self.connections = []
         self.nodes = []
+        self.start = start
+        self.end = end
     
     def get_length(self):
         length = 0
@@ -81,7 +83,7 @@ class StreetMap:
         self.surf = pygame.Surface(pygame.display.get_window_size())
         width, height = self.surf.get_size()
         for road in roads:
-            road.
+            road.segments 
             lastpoint = Vector2(way[0].x*width, way[0].y*height)
             for p in way:
                 pxpoint = Vector2(width*p.x, height*p.y)
@@ -132,7 +134,9 @@ class StreetMap:
                 seggroup.append(select)
                 
             print(seggroup)
-            r = Road(seggroup)
+            start = seg[0]
+            end = seggroup[-1]
+            r = Road(start, end, seggroup)
 
             roads.append(r)
 
