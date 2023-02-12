@@ -1,15 +1,24 @@
 import overpy
 from pygame import Vector2
 import pygame
+import numpy as np
 import math
 import sys
 
 class Road:
-    def __init__(self, length, nodes, segments: list[(Vector2,Vector2)]) -> None:
-        self.length = length
-        self.segments = []
+    def __init__(self,segments: list[tuple[Vector2,Vector2]]) -> None:
+        self.length = 0
+        self.segments = segments
         self.connections = []
-        self.nodes = nodes
+        self.nodes = []
+    
+    def get_length(self):
+        length = 0
+        for s in self.segments:
+            dist = s[0].distance_to(s[1])
+            length+= dist
+
+        return length
 
 class StreetMap:
     def __init__(self) -> None:
@@ -56,7 +65,7 @@ class StreetMap:
         
         return roads
 
-    def draw_city_lines(self, roads):
+    def _draw_city_lines(self, roads):
         self.surf = pygame.Surface(pygame.display.get_window_size())
         width, height = self.surf.get_size()
         for way in roads:
@@ -68,7 +77,20 @@ class StreetMap:
 
         return self.surf
     
-    def initialise_road_segments(self) -> list[tuple[Vector2,Vector2]], list[list[float]]:
+    def draw_city_lines(self, roads: Road):
+        self.surf = pygame.Surface(pygame.display.get_window_size())
+        width, height = self.surf.get_size()
+        for road in roads:
+            road.
+            lastpoint = Vector2(way[0].x*width, way[0].y*height)
+            for p in way:
+                pxpoint = Vector2(width*p.x, height*p.y)
+                pygame.draw.line(self.surf,"yellow", lastpoint, pxpoint,3)
+                lastpoint = pxpoint
+
+        return self.surf
+    
+    def initialise_road_segments(self) -> tuple[ list[tuple[Vector2,Vector2]], list[tuple[float, float]]]:
         roads = self.map_coords_to_pixels()
         
         segments = []
@@ -82,29 +104,39 @@ class StreetMap:
                 lastx = lastnode.x
                 x = node.x
                 segment = (lastnode, node)
-                xpair = (lastx, x)
+                xpair = [lastx, x]
                 segments.append(segment)
                 xvalues.append(xpair)
                 lastnode = node
 
         return segments, xvalues
 
+    def index(l, f):
+        return next((i for i in xrange(len(l)) if f(l[i])), None)
+
     def merge_segments(self, segments: list[tuple[Vector2,Vector2]], xvalues: list[list[float, float]]):
         z = zip(segments, xvalues)
 
-        for seg in z:
+        roads = []
+        for i, seg in enumerate(z):
             print ("-------")
-            group = []
+            seggroup = []
             #x coord
-            x1 = seg[1][0]
+            x1 = xvalues.pop(i)[0]
             #query
-            qu = seg[1]
-            for x1 in qu:
-                i = qu.index(x1)
-                print(i)
-                print(list(z)[i])
-                # print(list(z)[i])
-                print(x1)
+            qu = np.array(xvalues, dtype=object)
+            indicies = np.where(qu == x1)[0]
+
+            for i in indicies:
+                select = segments[i]
+                seggroup.append(select)
+                
+            print(seggroup)
+            r = Road(seggroup)
+
+            roads.append(r)
+
+            
 
                 
         
@@ -154,10 +186,12 @@ class StreetMap:
         # #     if tx in segx:
                 
 
-m = StreetMap()
 
-s,x = m.initialise_road_segments()
-m.merge_segments(s,x)
+
+# m = StreetMap()
+
+# s,x = m.initialise_road_segments()
+# m.merge_segments(s,x)
 
 
 

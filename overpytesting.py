@@ -3,10 +3,9 @@ from pygame import Vector2
 import pygame
 import math
 import sys
-<<<<<<< HEAD
 import random
-=======
->>>>>>> dc4af6f46460f6d7b29c115eff37f581775dfa52
+
+from Structures.StreetMap import StreetMap
 
 pygame.init()
 size = width, height = 320, 240
@@ -81,22 +80,23 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
 
-    for way in roads:
-        lastpoint = Vector2(way[0].x*width, way[0].y*height)
-        for p in way:
-            pxpoint = Vector2(width*p.x, height*p.y)
-<<<<<<< HEAD
-            col = "yellow"
-            pygame.draw.line(streetmap,col, lastpoint, pxpoint,3)
-=======
-            pygame.draw.line(streetmap,"yellow", lastpoint, pxpoint,3)
->>>>>>> dc4af6f46460f6d7b29c115eff37f581775dfa52
-            lastpoint = pxpoint
+    # for way in roads:
+    #     lastpoint = Vector2(way[0].x*width, way[0].y*height)
+    #     for p in way:
+    #         pxpoint = Vector2(width*p.x, height*p.y)
+    #         col = "yellow"
+    #         pygame.draw.line(streetmap,col, lastpoint, pxpoint,3)
+    #         lastpoint = pxpoint
 
     # lastpoint = Vector2(coords[0].x*width, coords[0].y*height)
     # for p in coords:
     #     pxpoint = Vector2(width*p.x, height*p.y)
     #     pygame.draw.circle(streetmap,"orange", pxpoint,2)
+
+    smap = StreetMap()
+    s,x = smap.initialise_road_segments()
+    smap.merge_segments(s, x)
+    
     
 
     screen.fill("black")
