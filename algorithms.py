@@ -3,10 +3,12 @@ import random
 import sys
 import math
 import time
+from operator import itemgetter
 
 from pygame import Vector2
 
 from Structures.Map import Map
+from Structures.Parcel import Parcel
 from config import *
 
 def identify_quadrant(quadtree, parcel):
@@ -177,5 +179,56 @@ def assign_destinations_route(quadtree_copy, clusters, nearby_parcels, parcel):
 def generate_deliveries():
     pass
 
-def create_parcels():
-    pass
+# Initialization
+def initialize_objects(raw_data, preset_deliveries: bool | list[str]) -> list[Parcel]:
+    deliveries = generate_deliveries(preset_deliveries)
+    parcels: list[Parcel] = Map.set_up_state(deliveries, raw_data) #todo make this correct
+    return parcels
+
+def generate_deliveries(preset_deliveries: bool | list[str]) -> list[str]:
+    if not preset_deliveries:
+        pass #todo randomly generate deliveries
+    else:
+        return preset_deliveries
+
+# Cluster Assignment
+def assign_clusters(parcels: list[Parcel], size: int) -> dict[str, list[Parcel]]:
+    cluster_radius = get_cluster_radius(size)
+    clusters: dict[str, list[Parcel]] = {}
+
+    parcels_to_check = set(parcels)
+    for origin in parcels_to_check:
+        cluster = {origin.name: [origin]}
+        for source in cluster[origin.name]:
+            near_parcels = get_parcel_neighbourhood(source) #note: near_parcels should be sorted closest to farthest!
+            for (target, distance) in near_parcels:
+                if (distance <= cluster_radius) and (target not in cluster[origin.name]):
+                  target.cluster_id = origin.name
+                  cluster[origin.name].append(target)
+                  parcels_to_check.remove(target)
+                else:
+                  break
+        if len(cluster[origin.name]) > 1:
+            clusters.update(cluster)
+        parcels_to_check.remove(origin)
+
+    return clusters
+
+def get_cluster_radius(distance: float) -> float:
+    pass #todo some operation to decide
+
+def get_parcel_neighbourhood(quadtree ,source: Parcel) -> list[tuple[Parcel, float]]: #note: near_parcels should be sorted closest to farthest!
+    #use quadtrees to give a short list of parcels to check along with associated distance using Map.find_distance() function
+    #also sort the list by proximity to source parcel
+    box_x, box_y = identify_quadrant(quadtree, source)
+    near_parcels = []
+
+    #add parcels in range
+    for i in range(box_x - 1, box_x + 2):
+        for j in range (box_y - 1, box_y + 2):
+            for target in quadtree[i][j]:
+                dist = Map.find_distance(source.position, target.position)
+                near_parcels.append((target,dist))
+    near_parcels = sorted(near_parcels, key=itemgetter(1))
+
+    pass 
