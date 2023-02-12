@@ -29,8 +29,7 @@ screen = pygame.display.set_mode(size)
 dots = pygame.Surface.copy(screen)
 
 coords_list = []
-for entry in Map.parcels:
-    parcel = entry[0]
+for parcel in Map.parcels:
     coords_list.append(parcel.position)
 
 route = sort_by_distance(coords_list, Map.warehouse)

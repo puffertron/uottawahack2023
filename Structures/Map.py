@@ -13,7 +13,7 @@ class Map:
     # The state of the class, just initialized in 'Algorithm'
     available_points:list[Vector2] = []
     warehouse:Vector2 = Vector2(0,0)
-    parcels:list[tuple[Parcel, float]] = []
+    parcels:list[Parcel] = [] # order closest to warehouse to farthest
     
     
     
@@ -35,11 +35,12 @@ class Map:
     
     @staticmethod
     def create_parcels(parcel_info: list[tuple[str,]]):
+        parcel_dist_pairs = []
         for entry in parcel_info:
             parcel = Parcel(entry[0], Map.name_to_location())
             distance = Map.find_distance(parcel.position,Map.warehouse)
-            Map.parcels.append((parcel,distance))
-        Map.parcels = sorted(Map.parcels, key=itemgetter(1))
+            parcel_dist_pairs.append((parcel,distance))
+        Map.parcels = [parcel_dist_pair[0] for parcel_dist_pair in sorted(parcel_dist_pairs, key=itemgetter(1))]
 
     @staticmethod
     def find_distance(target: Vector2, source: Vector2):
