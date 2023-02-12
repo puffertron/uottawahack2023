@@ -33,7 +33,7 @@ def construct_quadtree():
     return quadtree
 
 # TODO To make more efficient can try to increase view of quad tree one box at a time, instead of one radius at a time
-def assign_destinations(quadtree):
+def assign_destinations(quadtree, clusters):
     quadtree_copy = []
     for x in range(granularity):
         quadtree_copy.append([])
@@ -47,28 +47,52 @@ def assign_destinations(quadtree):
             if parcel.assigned:
                 del Map.parcels[index]
             else:
-                routes.append(assign_destinations_route(quadtree_copy, [], parcel))
+                routes += assign_destinations_route(quadtree_copy, clusters, [], parcel)
 
         # REMOVE LATER
         for route in routes:
-            print("Route: ")
+            print("Route: " + str(len(route)))
             for parcel in route:
                 print(parcel.position.x, parcel.position.y)
             
     return routes
 
-def assign_destinations_route(quadtree_copy, nearby_parcels, parcel):
+def unparcel_boxes(boxes, parcel):
+    nearby_parcels = []
+    for box in boxes:
+        for quad_parcel in box[0]:
+            if (quad_parcel.cluster_id):
+                return False, quad_parcel
+            nearby_parcels.append((quad_parcel, box[1], Map.find_distance(parcel.position, quad_parcel.position)))
+    return True, nearby_parcels
+
+def assign_destinations_route(quadtree_copy, clusters, nearby_parcels, parcel):
+    saved_parcels = []
+    routes = []
+    
     box_x, box_y = identify_quadrant(quadtree_copy, parcel)
     boxes = [(quadtree_copy[box_x][box_y], (box_x, box_y))]
     depth = 0
     
     while True:
-        for box in boxes:
-            for quad_parcel in box[0]:
-                nearby_parcels.append((quad_parcel, box[1], Map.find_distance(parcel.position, quad_parcel.position)))
-            boxes.remove(box)
+        unboxed, unboxed_parcels = unparcel_boxes(boxes, parcel)
+        if unboxed:
+            nearby_parcels += unboxed_parcels
+        else:
+            saved_parcels = nearby_parcels.copy()
+            nearby_parcels = []
+            
+            clustered_parcels = clusters[unboxed_parcels.cluster_id]
+            
+            for saved_parcel in (saved_parcels + clustered_parcels):
+                saved_parcel[0].assigned = True
+                quadtree_copy[saved_parcel[1][0]][saved_parcel[1][1]].discard(saved_parcel[0])
+            
+            routes += assign_destinations_route(quadtree_copy, clusters, clustered_parcels, unboxed_parcels)
+            depth -= 1
+        boxes = []
         
-        if len(nearby_parcels) >= max_parcel_delivery_size:
+        if len(saved_parcels) + len(nearby_parcels) >= max_parcel_delivery_size:
             break
 
         depth += 1
@@ -98,7 +122,7 @@ def assign_destinations_route(quadtree_copy, nearby_parcels, parcel):
     
     while True:
         nearby_parcels.sort(key=lambda nearby_parcel: nearby_parcel[2])
-        nearby_parcels = nearby_parcels[:max_parcel_delivery_size]
+        nearby_parcels = nearby_parcels[:(max_parcel_delivery_size - len(saved_parcels))]
 
         radius = nearby_parcels[-1][2]
         
@@ -131,13 +155,13 @@ def assign_destinations_route(quadtree_copy, nearby_parcels, parcel):
                 nearby_parcels.append((quad_parcel, box[1], Map.find_distance(parcel.position, quad_parcel.position)))
             boxes.remove(box)
     
-    route = []
     for nearby_parcel in nearby_parcels:
         nearby_parcel[0].assigned = True
         quadtree_copy[nearby_parcel[1][0]][nearby_parcel[1][1]].discard(nearby_parcel[0])
-        route.append(nearby_parcel[0])
 
-    return route
+    routes.append([nearby_parcel[0] for nearby_parcel in (nearby_parcels + saved_parcels)])
+
+    return routes
 
 def generate_deliveries():
     pass

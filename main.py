@@ -19,4 +19,4 @@ Map.open_street_map_processor(parcel_info, random_points(len(parcel_info) + 10, 
 
 quadtree = construct_quadtree()
 
-assign_destinations(quadtree)
+assign_destinations(quadtree, {})
