@@ -23,7 +23,9 @@ middle = Vector2(width/2, height/2)
 # creating surfaces to draw on, background and dots layer
 # (layer for truck is stored in truck class)
 screen = pygame.display.set_mode(size)
+streetmap = pygame.surface.copy(screen)
 dots = pygame.Surface.copy(screen)
+
 
 # global coords variable, this is a primitive list of packages
 coords = [Vector2(0,0)]
