@@ -67,7 +67,13 @@ def unparcel_boxes(boxes, parcel):
     return True, nearby_parcels
 
 def assign_destinations_route(quadtree_copy, clusters, nearby_parcels, parcel):
-    saved_parcels = []
+    if nearby_parcels == []:
+        saved_parcels = []
+    else:
+        saved_parcels = nearby_parcels.copy()
+        saved_parcels = [(saved_parcel, 0) for saved_parcel in saved_parcels]
+        nearby_parcels = []
+    
     routes = []
     
     box_x, box_y = identify_quadrant(quadtree_copy, parcel)
@@ -84,9 +90,14 @@ def assign_destinations_route(quadtree_copy, clusters, nearby_parcels, parcel):
             
             clustered_parcels = clusters[unboxed_parcels.cluster_id]
             
-            for saved_parcel in (saved_parcels + clustered_parcels):
+            for saved_parcel in saved_parcels:
                 saved_parcel[0].assigned = True
                 quadtree_copy[saved_parcel[1][0]][saved_parcel[1][1]].discard(saved_parcel[0])
+            
+            for clustered_parcel in clustered_parcels:
+                clustered_parcel.assigned = True
+                box_x, box_y = identify_quadrant(quadtree_copy, clustered_parcel)
+                quadtree_copy[box_x][box_y].discard(clustered_parcel)
             
             routes += assign_destinations_route(quadtree_copy, clusters, clustered_parcels, unboxed_parcels)
             depth -= 1
