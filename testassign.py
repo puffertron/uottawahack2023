@@ -12,8 +12,7 @@ Map.set_up_state(parcel_info, random_points(len(parcel_info) + 10, width, height
 
 quadtree = construct_quadtree()
 clusters = assign_clusters(Map.parcels,max((config.map_width,config.map_height)),quadtree)
-routes = assign_destinations(quadtree, clusters)
-
+routes = assign_destinations(quadtree)
 
 pygame.init()
 screen = pygame.display.set_mode(size)
