@@ -12,12 +12,18 @@ class Truck:
         self.speed = .01
         self.surf = pygame.Surface(pygame.display.get_window_size())
     
-    def drive_route(self, route, start):
+    def drive_route(self, route, start, color):
         route = self.construct_route([route.position for route in route], start)
-        last = start
-        for p in route:
-            pygame.draw.line(self.surf, self.color, last, p, 2)
-            last = p
+        roads = []
+        prev = start
+        for curr in route:
+            roads += Map.find_distance(prev, curr)
+            prev = curr
+        return roads
+        # last = start
+        # for p in route:
+        #     pygame.draw.line(self.surf, self.color, last, p, 2)
+        #     last = p
     
     def construct_route(self, route, start):
         new_route = []
@@ -31,10 +37,10 @@ class Truck:
         smallest_distance_location = None
         
         for location in route:
-            distance = Map.find_distance(point, location)
+            distance = (point - location).magnitude()
             if smallest_distance == None or distance < smallest_distance:
                 smallest_distance = distance
                 smallest_distance_location = location
-        
+
         route.remove(smallest_distance_location)
         return smallest_distance_location

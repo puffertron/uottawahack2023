@@ -9,12 +9,13 @@ class Road:
     def __init__(self,start, end, segments: list[tuple[Vector2,Vector2]]):
         self.length = 0
         self.segments = segments
-        self.connections = []
+        self.start_connections = []
+        self.end_connections = []
         self.nodes = []
         self.start = start
         self.end = end
     
-    def get_length(self):
+    def get_length(self): #TODO - make it so it does this once and never does it again
         length = 0
         for s in self.segments:
             dist = s[0].distance_to(s[1])
@@ -150,6 +151,8 @@ class StreetMap:
         return roads
 
             
+    def populate_linked_list_network():
+        pass
 
                 
         
