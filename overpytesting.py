@@ -3,6 +3,7 @@ from pygame import Vector2
 import pygame
 import math
 import sys
+import random
 
 pygame.init()
 size = width, height = 320, 240
@@ -81,7 +82,8 @@ while True:
         lastpoint = Vector2(way[0].x*width, way[0].y*height)
         for p in way:
             pxpoint = Vector2(width*p.x, height*p.y)
-            pygame.draw.line(streetmap,"yellow", lastpoint, pxpoint,3)
+            col = "yellow"
+            pygame.draw.line(streetmap,col, lastpoint, pxpoint,3)
             lastpoint = pxpoint
 
     # lastpoint = Vector2(coords[0].x*width, coords[0].y*height)
