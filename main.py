@@ -1,3 +1,5 @@
+import pygame
+
 #imports
 # import basicplot
 from algorithms import *
