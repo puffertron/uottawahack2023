@@ -1,15 +1,19 @@
 import pygame
 
+import config
 from algorithms import *
 from algorythms import *
 from Structures.Truck import Truck
+from Structures.Map import Map
 
 size = width, height = 800, 800
 parcel_info = create_parcel_info()  
 Map.set_up_state(parcel_info, random_points(len(parcel_info) + 10, width, height))
 
 quadtree = construct_quadtree()
-routes = assign_destinations(quadtree, {})
+clusters = assign_clusters(Map.parcels,max((config.map_width,config.map_height)),quadtree)
+routes = assign_destinations(quadtree, clusters)
+
 
 pygame.init()
 screen = pygame.display.set_mode(size)
@@ -27,7 +31,7 @@ while True:
     for index, route in enumerate(routes):
         for p in [route.position for route in route]:
             pygame.draw.circle(dots, colors[index % len(colors)], p, 3.0)
-        tkun_list[index].drive_route(route, Vector2(0,0))
+        tkun_list[index].drive_route(route, Map.warehouse)
 
     screen.fill("black")
     for tkun in tkun_list:
