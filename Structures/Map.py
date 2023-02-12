@@ -5,9 +5,13 @@ from operator import itemgetter
 
 from Structures.Parcel import Parcel
 
+<<<<<<< HEAD
 import random
 
 #This is a class that no instances should be made. This is a class to hold make the info of the map and hold the map data.
+=======
+
+>>>>>>> dc4af6f46460f6d7b29c115eff37f581775dfa52
 class Map:
 
     # The state of the class, just initialized in 'Algorithm'
