@@ -4,6 +4,7 @@ import pygame
 from operator import itemgetter
 
 from Structures.Parcel import Parcel
+from StreetMap import Road
 
 import random
 
@@ -44,7 +45,19 @@ class Map:
 
     @staticmethod
     def find_distance(target: Vector2, source: Vector2):
-        
+        travel_attempts:list[tuple[list[Road]], Road, float] = [] #First element is roads taken, second is current road, third is distance until end of road
+        output = tuple[float, list[Road]] = (0,[])
+
+        running = True
+        distance_since_last_iter:int = 0
+        while running:
+            #find next closest junction
+
+            distance_since_last_iter = 
 
 
-        return (target - source).magnitude()
+
+            #if reached end, set output to winner and set running = False
+
+
+        return output

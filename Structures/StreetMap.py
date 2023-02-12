@@ -6,7 +6,7 @@ import math
 import sys
 
 class Road:
-    def __init__(self,start, end, segments: list[tuple[Vector2,Vector2]]) -> None:
+    def __init__(self:Vector2,start:Vector2, end, segments: list[tuple[Vector2,Vector2]]) -> None:
         self.length = 0
         self.segments = segments
         self.start_connections = []
@@ -142,6 +142,24 @@ class StreetMap:
             roads.append(r)
 
     def populate_linked_list_network():
+        for road in roads: #TODO - make it so it populates both sides at once to make way more efficient
+            #Do this process twice, once for start points, once for end points
+            StreetMap.populate_road_ll(road, roads, True)
+            StreetMap.populate_road_ll(road, roads, True)
+            
+            
+    #function only used in populate_linked_list_network
+    def populate_road_ll(source_road:Road, roads:list[Road], is_start:bool): #TODO - make it not be taking the bool, theres a better way but rushed
+        #If is_start is true, does at start points, if false, then end point
+        if is_start == True:
+            source = source_road.start
+        else:
+            source = source_road.end
+        
+        #Find roads with same x pos (either start or end)
+        #Check that they have same y pos
+
+        #Populate links (only for source)
         pass
 
                 
