@@ -20,13 +20,16 @@ def assign_clusters(parcels: list[Parcel], size: int) -> dict[str: list[Parcel]]
     clusters: dict[str: list[Parcel]] = {}
     parcels_to_check = set(parcels)
     for source in parcels_to_check:
-        near_parcels: list[Parcel] = get_parcel_neighbourhood(entry[0]) #note: near_parcels should be sorted closest to farthest!
-        for parcel in near_parcels:
-            if
+        near_parcels: list[tuple(Parcel, float)] = get_parcel_neighbourhood(source) #note: near_parcels should be sorted closest to farthest!
+        for target, distance in near_parcels:
+            if distance <= cluster_radius:
+                target.
 
 
 def get_cluster_radius(distance: float) -> float:
     pass #todo some operation to decide
 
-def get_parcel_neighbourhood(parcel: Parcel) -> list[Parcel]: #note: near_parcels should be sorted closest to farthest!
-    pass #todo use quadtrees to give a short list of parcels to check
+def get_parcel_neighbourhood(parcel: Parcel) -> list[tuple(Parcel, float)]: #note: near_parcels should be sorted closest to farthest!
+    #todo use quadtrees to give a short list of parcels to check along with associated distance using Map.find_distance() function
+    #also sort the list by proximity to source parcel
+    pass 
