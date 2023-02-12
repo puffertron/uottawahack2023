@@ -21,6 +21,7 @@ class Road:
             length+= dist
 
         return length
+    
 
 class StreetMap:
     def __init__(self) -> None:
@@ -127,9 +128,13 @@ class StreetMap:
             #x coord
             #x1 = xvalues.pop(i)[0]
             x1 = xvalues[i][0]
+            x2 = xvalues[i][1]
             #query
             qu = np.array(xvalues, dtype=object)
-            indicies = np.where(qu == x1)[0]
+            indicies1 = np.where(qu == x1)[0]
+            indicies2 = np.where(qu == x2)[0]
+
+            indicies = indicies1.tolist() + indicies2.tolist()
 
             for i in indicies:
                 select = segments[i]
