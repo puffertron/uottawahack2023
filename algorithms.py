@@ -181,32 +181,34 @@ def generate_deliveries(preset_deliveries: bool | list[str]) -> list[str]:
         return preset_deliveries
 
 # Cluster Assignment
-def assign_clusters(parcels: list[Parcel], size: int) -> dict[str, list[Parcel]]:
+def assign_clusters(parcels: list[Parcel], size: int, quadtree: list[list[set]]) -> dict[str, list[Parcel]]:
     cluster_radius = get_cluster_radius(size)
     clusters: dict[str, list[Parcel]] = {}
 
-    parcels_to_check = set(parcels)
-    for origin in parcels_to_check:
+    parcels_to_check = list(parcels)
+    while len(parcels_to_check) > 0:
+        origin = parcels_to_check.pop(0)
         cluster = {origin.name: [origin]}
         for source in cluster[origin.name]:
-            near_parcels = get_parcel_neighbourhood(source) #note: near_parcels should be sorted closest to farthest!
+            near_parcels = get_parcel_neighbourhood(quadtree, source) #note: near_parcels should be sorted closest to farthest!
             for (target, distance) in near_parcels:
-                if (distance <= cluster_radius) and (target not in cluster[origin.name]):
-                  target.cluster_id = origin.name
-                  cluster[origin.name].append(target)
-                  parcels_to_check.remove(target)
-                else:
+                if (distance > cluster_radius) or (len(cluster[origin.name]) > 11):
                   break
+                if target in parcels_to_check:
+                    target.cluster_id = origin.name
+                    cluster[origin.name].append(target)
+                    parcels_to_check.remove(target)
+            if len(cluster[origin.name]):
+                break
         if len(cluster[origin.name]) > 1:
             clusters.update(cluster)
-        parcels_to_check.remove(origin)
 
     return clusters
 
-def get_cluster_radius(distance: float) -> float:
-    pass #todo some operation to decide
+def get_cluster_radius(max_distance: float) -> float:
+    return max_distance / cluster_strictness #TODO decide who has config
 
-def get_parcel_neighbourhood(quadtree ,source: Parcel) -> list[tuple[Parcel, float]]: #note: near_parcels should be sorted closest to farthest!
+def get_parcel_neighbourhood(quadtree: list[list[set]] ,source: Parcel) -> list[tuple[Parcel, float]]: #note: near_parcels should be sorted closest to farthest!
     #use quadtrees to give a short list of parcels to check along with associated distance using Map.find_distance() function
     #also sort the list by proximity to source parcel
     box_x, box_y = identify_quadrant(quadtree, source)
@@ -215,9 +217,8 @@ def get_parcel_neighbourhood(quadtree ,source: Parcel) -> list[tuple[Parcel, flo
     #add parcels in range
     for i in range(box_x - 1, box_x + 2):
         for j in range (box_y - 1, box_y + 2):
-            for target in quadtree[i][j]:
-                dist = Map.find_distance(source.position, target.position)
-                near_parcels.append((target,dist))
-    near_parcels = sorted(near_parcels, key=itemgetter(1))
-
-    pass 
+            if (len(quadtree) > i) and (len(quadtree[i]) > j):
+                for target in quadtree[i][j]:
+                    dist = Map.find_distance(source.position, target.position)
+                    near_parcels.append((target,dist))
+    return sorted(near_parcels, key=itemgetter(1))

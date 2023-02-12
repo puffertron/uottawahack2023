@@ -6,8 +6,8 @@ import time
 
 from pygame import Vector2
 
-def create_parcel_info() -> list[tuple[str,]]:
-    amount = random.randint(50,100)
+def create_parcel_info() -> list[str]:
+    amount = random.randint(100,500)
     parcels = []
     for i in range(amount):
         letter = chr(random.randint(32,126))
