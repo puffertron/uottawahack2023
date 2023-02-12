@@ -9,6 +9,7 @@ import random
 
 #This is a class that no instances should be made. This is a class to hold make the info of the map and hold the map data.
 class Map:
+
     # The state of the class, just initialized in 'Algorithm'
     available_points:list[Vector2] = []
     warehouse:Vector2 = Vector2(0,0)
@@ -43,5 +44,3 @@ class Map:
     @staticmethod
     def find_distance(target: Vector2, source: Vector2):
         return (target - source).magnitude()
-    
-
