@@ -18,12 +18,22 @@ def generate_deliveries(preset_deliveries: bool | list[str]) -> list[str]:
 def assign_clusters(parcels: list[Parcel], size: int) -> dict[str: list[Parcel]]:
     cluster_radius: float = get_cluster_radius(size)
     clusters: dict[str: list[Parcel]] = {}
-    parcels_to_check = set(parcels)
-    for source in parcels_to_check:
-        near_parcels: list[tuple(Parcel, float)] = get_parcel_neighbourhood(source) #note: near_parcels should be sorted closest to farthest!
-        for target, distance in near_parcels:
-            if distance <= cluster_radius:
-                target.
+
+    parcels_to_check: set[Parcel] = set(parcels)
+    for origin in parcels_to_check:
+        cluster: dict[str: list[Parcel]] = {origin.name: [origin]}
+        for source in cluster[origin.name]:
+            near_parcels: list[tuple[Parcel, float]] = get_parcel_neighbourhood(source) #note: near_parcels should be sorted closest to farthest!
+            for (target, distance) in near_parcels:
+                if (distance <= cluster_radius) and (target not in cluster[origin.name]):
+                  target.cluster_id = origin.name
+                  cluster[origin.name].append(target)
+                  parcels_to_check.remove(target)
+                else:
+                  break
+        if len(cluster[origin.name]) > 1:
+            clusters.update(cluster)
+        parcels_to_check.remove(origin)
 
 
 def get_cluster_radius(distance: float) -> float:
