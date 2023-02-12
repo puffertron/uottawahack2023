@@ -1,10 +1,12 @@
 #imports
 import basicplot
 from algorithms import *
+import config
 
 #constants
-RANDOM_DELIVERIES = True
-PRESET_DELIVERIES = ["Put house names here"]
+PRESET_DELIVERIES = False
+OPEN_STREET_MAPS_DATA = None
 
 #main
-parcels = create_parcels()
+parcels = initialize_objects(OPEN_STREET_MAPS_DATA, PRESET_DELIVERIES)
+assign_clusters(parcels,config.size) #todo fix config name 
