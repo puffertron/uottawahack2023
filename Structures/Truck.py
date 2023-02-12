@@ -12,11 +12,11 @@ class Truck:
         self.speed = .01
         self.surf = pygame.Surface(pygame.display.get_window_size())
     
-    def drive_route(self, route, start):
+    def drive_route(self, route, start, color):
         route = self.construct_route([route.position for route in route], start)
         last = start
         for p in route:
-            pygame.draw.line(self.surf, self.color, last, p, 2)
+            pygame.draw.line(self.surf, color, last, p, 2)
             last = p
     
     def construct_route(self, route, start):
