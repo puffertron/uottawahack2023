@@ -8,7 +8,7 @@ import random
 from Structures.StreetMap import StreetMap
 
 pygame.init()
-size = width, height = 320, 240
+size = width, height = 650, 500
 middle = Vector2(width/2, height/2)
 
 # creating surfaces to draw on, background and dots layer

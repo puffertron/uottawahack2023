@@ -22,6 +22,7 @@ class Road:
             length+= dist
 
         return length
+
     
 
 class StreetMap:
@@ -140,8 +141,8 @@ class StreetMap:
                 select = segments[i]
                 seggroup.append(select)
                 
-            start = seg[0]
-            end = seggroup[-1]
+            start = seg[0][0]
+            end = seggroup[-1][1]
             r = Road(start, end, seggroup)
 
             roads.append(r)
@@ -149,15 +150,15 @@ class StreetMap:
         return roads
 
             
-    def populate_linked_list_network(roads: list[Road]):
+    def populate_linked_list_network(self, roads: list[Road]):
         for road in roads: #TODO - make it so it populates both sides at once to make way more efficient
             #Do this process twice, once for start points, once for end points
-            StreetMap.populate_road_ll(road, roads, True)
-            StreetMap.populate_road_ll(road, roads, False)
+            self.populate_road_ll(road, roads, True)
+            self.populate_road_ll(road, roads, False)
             
             
-    #function only used in populate_linked_list_network
-    def populate_road_ll(source_road:Road, roads:list[Road], is_start:bool): #TODO - make it not be taking the bool, theres a better way but rushed
+    #function only used in populate_linked_list_network #TODO - This function doesn't work, gotta fix it
+    def populate_road_ll(self, source_road:Road, roads:list[Road], is_start:bool): #TODO - make it not be taking the bool, theres a better way but rushed
         #If is_start is true, does at start points, if false, then end point
         source_coord = Vector2(0,0)
         populating_roads = []
@@ -169,34 +170,36 @@ class StreetMap:
 
         #TODO - makle one func that does this since code in multiple places
         #z = zip(roads, xvalues)
+        xvalues = []
+        for r in roads:
+            startpoints = r.start.x
+            endpoints = r.end.x
+            xvalues.append([startpoints,endpoints])
 
         for i, road in enumerate(roads):
             #x coord
             #x1 = xvalues.pop(i)[0]
-            x1 = road.start.x
-            x2 = road.end.x
-            #query
+            startpoint = road.start.x
+            endpoint = road.end.x
             
-            #THIS IS OLD CODE TO DELETE
-                # qu = np.array(xvalues, dtype=object)
-                # indicies1 = np.where(qu == x1)[0]
-                # indicies2 = np.where(qu == x2)[0]
+            qu = np.array(xvalues, dtype=object)
 
-                # indicies = indicies1.tolist() + indicies2.tolist()
+            interstart = np.where(qu == startpoint)[0]
+            interend = np.where(qu == endpoint)[0]
 
-                # for i in indicies:
-                #     select = segments[i]
-                #     seggroup.append(select)
-                    
-                # start = seg[0]
-                # end = seggroup[-1]
-                # r = Road(start, end, seggroup)
+            inter = interstart.tolist() + interend.tolist()
 
-                # roads.append(r)
-        #Find roads with same x pos (either start or end)
-        #Check that they have same y pos
+            print(inter)
 
 
+        #     for i in inter:
+        #         populating_roads.append(roads[i])
+
+        # for i in populating_roads:
+        #     print(f"{i.start} {i.end}")
+        
+        print()
+            
 
         #Populate links (only for source)
         pass
@@ -214,7 +217,7 @@ class StreetMap:
         # segx2 = []
         # for s in segments:
         #     segx.append(s[0])
-        #     segx2.append(s[1])
+        #     segx2.append(s[1])StreetMap
 
         # for segment in segments:
         #     tx = segments.pop(0)
