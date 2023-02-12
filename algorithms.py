@@ -3,12 +3,27 @@ import random
 import sys
 import math
 import time
+from operator import itemgetter
 
 from pygame import Vector2
 
 from Structures.Map import Map
 from Structures.Parcel import Parcel
 from config import *
+
+def identify_quadrant(quadtree, parcel):
+    box_x = math.floor(parcel.position.x / box_width)
+    box_y = math.floor(parcel.position.y / box_height)
+
+    # for case when point on right or bottom edge
+    try:
+        quadtree[box_x][box_y]
+    except IndexError:
+        if box_x == granularity:
+            box_x -= 1
+        if box_y == granularity:
+            box_y -= 1
+    return box_x, box_y
 
 def construct_quadtree():
     quadtree = [[{} for i in range(granularity)] for i in range(granularity)]
@@ -80,7 +95,18 @@ def assign_clusters(parcels: list[Parcel], size: int) -> dict[str, list[Parcel]]
 def get_cluster_radius(distance: float) -> float:
     pass #todo some operation to decide
 
-def get_parcel_neighbourhood(parcel: Parcel) -> list[tuple[Parcel, float]]: #note: near_parcels should be sorted closest to farthest!
-    #todo use quadtrees to give a short list of parcels to check along with associated distance using Map.find_distance() function
+def get_parcel_neighbourhood(quadtree ,source: Parcel) -> list[tuple[Parcel, float]]: #note: near_parcels should be sorted closest to farthest!
+    #use quadtrees to give a short list of parcels to check along with associated distance using Map.find_distance() function
     #also sort the list by proximity to source parcel
+    box_x, box_y = identify_quadrant(quadtree, source)
+    near_parcels = []
+
+    #add parcels in range
+    for i in range(box_x - 1, box_x + 2):
+        for j in range (box_y - 1, box_y + 2):
+            for target in quadtree[i][j]:
+                dist = Map.find_distance(source.position, target.position)
+                near_parcels.append((target,dist))
+    near_parcels = sorted(near_parcels, key=itemgetter(1))
+
     pass 
