@@ -39,3 +39,9 @@ def assign_destinations():
         else:
             # continue
             pass
+
+def generate_deliveries():
+    pass
+
+def create_parcels():
+    pass
