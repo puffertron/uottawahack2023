@@ -10,6 +10,7 @@ class StreetMap:
         self.streets = []
         self.originbbox = (45.386866,-75.660574, 45.379612,-75.675371)
         self.surf = pygame.Surface(pygame.display.get_window_size())
+        self.roads = []
     
     def parse_OSM_data(self):
         api = overpy.Overpass()
@@ -30,7 +31,7 @@ class StreetMap:
 
         return result
     
-    def map_coords_to_pixels(self):
+    def map_coords_to_pixels(self) -> list[list[Vector2]]:
         result = self.parse_OSM_data()
 
         roads = []
@@ -47,15 +48,29 @@ class StreetMap:
 
             roads.append(coords)
         
+        self.roads = roads
         return roads
 
     def draw_city_lines(self, roads):
+        width, height = self.surf.get_size()
         for way in roads:
             lastpoint = Vector2(way[0].x*width, way[0].y*height)
             for p in way:
                 pxpoint = Vector2(width*p.x, height*p.y)
-                pygame.draw.line(streetmap,"yellow", lastpoint, pxpoint,3)
+                pygame.draw.line(self.surf,"yellow", lastpoint, pxpoint,3)
                 lastpoint = pxpoint
 
-        return 
+        return self.surf
+    
+    def initialise_road_segments(self):
+        roads = self.map_coords_to_pixels()
 
+        for road in roads:
+            length = 0
+            for segment in road:
+                dist = 0
+
+
+class Road:
+    def __init__(self, length) -> None:
+        pass
