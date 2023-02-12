@@ -75,6 +75,9 @@ for way in result.ways:
 
 # print(coords)
 
+smap = StreetMap()
+s,x = smap.initialise_road_segments()
+r = smap.merge_segments(s, x)
 
 while True:
     for event in pygame.event.get():
@@ -93,11 +96,8 @@ while True:
     #     pxpoint = Vector2(width*p.x, height*p.y)
     #     pygame.draw.circle(streetmap,"orange", pxpoint,2)
 
-    smap = StreetMap()
-    s,x = smap.initialise_road_segments()
-    smap.merge_segments(s, x)
     
-    
+    streetmap = smap.draw_city_lines(r)
 
     screen.fill("black")
     screen.blit(streetmap, streetmap.get_rect(), special_flags=pygame.BLEND_ADD)
