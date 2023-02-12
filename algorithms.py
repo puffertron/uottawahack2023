@@ -34,6 +34,12 @@ def construct_quadtree():
 
 # TODO To make more efficient can try to increase view of quad tree one box at a time, instead of one radius at a time
 def assign_destinations(quadtree):
+    quadtree_copy = []
+    for x in range(granularity):
+        quadtree_copy.append([])
+        for y in range(granularity):
+            quadtree_copy[x].append(quadtree[x][y].copy())
+    
     routes = []
     
     while Map.parcels != []:
@@ -45,8 +51,8 @@ def assign_destinations(quadtree):
             nearby_parcels = []
             
             depth = 0
-            box_x, box_y = identify_quadrant(quadtree, parcel)
-            boxes = [(quadtree[box_x][box_y], (box_x, box_y))]
+            box_x, box_y = identify_quadrant(quadtree_copy, parcel)
+            boxes = [(quadtree_copy[box_x][box_y], (box_x, box_y))]
 
             while True:
                 for box in boxes:
@@ -66,13 +72,13 @@ def assign_destinations(quadtree):
 
                 for i in range(depth * 2):
                     if temp_box_x + i >= 0 and temp_box_x + i < granularity and temp_box_y >= 0 and temp_box_y < granularity:
-                        boxes.append((quadtree[temp_box_x + i][temp_box_y], (temp_box_x + i, temp_box_y)))
+                        boxes.append((quadtree_copy[temp_box_x + i][temp_box_y], (temp_box_x + i, temp_box_y)))
                     if temp_box_x >= 0 and temp_box_x < granularity and temp_box_y + i >= 0 and temp_box_y + i < granularity:
-                        boxes.append((quadtree[temp_box_x][temp_box_y + i], (temp_box_x, temp_box_y + i)))
+                        boxes.append((quadtree_copy[temp_box_x][temp_box_y + i], (temp_box_x, temp_box_y + i)))
                     if temp_box_x + depth * 2 >= 0 and temp_box_x + depth * 2 < granularity and temp_box_y + i >= 0 and temp_box_y + i < granularity:
-                        boxes.append((quadtree[temp_box_x + depth * 2][temp_box_y + i], (temp_box_x + depth * 2, temp_box_y + i)))
+                        boxes.append((quadtree_copy[temp_box_x + depth * 2][temp_box_y + i], (temp_box_x + depth * 2, temp_box_y + i)))
                     if temp_box_x + i >= 0 and temp_box_x + i < granularity and temp_box_y + depth * 2 >= 0 and temp_box_y + depth * 2 < granularity:
-                        boxes.append((quadtree[temp_box_x + i][temp_box_y + depth * 2], (temp_box_x + i, temp_box_y + depth * 2)))
+                        boxes.append((quadtree_copy[temp_box_x + i][temp_box_y + depth * 2], (temp_box_x + i, temp_box_y + depth * 2)))
 
             nearby_parcels.sort(key=lambda nearby_parcel: nearby_parcel[2])
             nearby_parcels = nearby_parcels[:max_parcel_delivery_size]
@@ -82,7 +88,7 @@ def assign_destinations(quadtree):
             route = []
             for nearby_parcel in nearby_parcels:
                 nearby_parcel[0].assigned = True
-                quadtree[nearby_parcel[1][0]][nearby_parcel[1][1]].discard(nearby_parcel[0])
+                quadtree_copy[nearby_parcel[1][0]][nearby_parcel[1][1]].discard(nearby_parcel[0])
                 route.append(nearby_parcel[0])
             routes.append(route)
 
