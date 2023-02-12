@@ -5,7 +5,7 @@ from algorythms import *
 
 size = width, height = 800, 800
 parcel_info = create_parcel_info()  
-Map.open_street_map_processor(parcel_info, random_points(len(parcel_info) + 10, width, height))
+Map.set_up_state(parcel_info, random_points(len(parcel_info) + 10, width, height))
 
 quadtree = construct_quadtree()
 routes = assign_destinations(quadtree, {})
