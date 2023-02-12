@@ -4,3 +4,4 @@ granularity = 10
 box_width = map_width / granularity
 box_height = map_height / granularity
 max_parcel_delivery_size = 5
+cluster_strictness = 25
