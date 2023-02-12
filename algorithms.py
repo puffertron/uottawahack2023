@@ -52,10 +52,10 @@ def assign_destinations(quadtree, clusters):
                 routes += assign_destinations_route(quadtree_copy, clusters, [], parcel)
 
         # REMOVE LATER
-        for route in routes:
-            print("Route: " + str(len(route)))
-            for parcel in route:
-                print(parcel.position.x, parcel.position.y)
+        # for route in routes:
+        #     print("Route: " + str(len(route)))
+        #     for parcel in route:
+        #         print(parcel.position.x, parcel.position.y)
             
     return routes
 
